@@ -1,0 +1,47 @@
+# Intégration continue uniquement (pas de déploiement) : restauration, compilation, tests et couverture de code.
+name: CI RepairIT
+
+on:
+  workflow_dispatch:
+  # Chaque commit poussé, quelle que soit la branche, déclenche la CI.
+  push:
+  pull_request:
+    branches: [ production ]
+
+jobs:
+  build-et-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restauration des dépendances
+        run: dotnet restore RepairIT.sln
+
+      - name: Compilation
+        run: dotnet build RepairIT.sln --no-restore
+
+      - name: Tests et collecte de la couverture
+        run: dotnet test RepairIT.sln --no-build --settings coverage.runsettings --results-directory ./TestResults
+
+      # Fusionne les rapports Cobertura de chaque projet de tests en un seul résumé.
+      - name: Calcul de la couverture de code
+        run: |
+          dotnet tool install --global dotnet-reportgenerator-globaltool
+          reportgenerator -reports:"TestResults/**/coverage.cobertura.xml" -targetdir:CoverageReport -reporttypes:"MarkdownSummaryGithub;Html"
+
+      # Affiche la couverture dans le résumé de l'exécution GitHub Actions.
+      - name: Affichage de la couverture
+        run: cat CoverageReport/SummaryGithub.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publication du rapport de couverture
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapport-couverture
+          path: CoverageReport

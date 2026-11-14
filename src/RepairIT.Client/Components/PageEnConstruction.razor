@@ -1,0 +1,13 @@
+@* Encart affiché sur les pages dont la fonctionnalité arrive dans une version ultérieure du projet. *@
+<section class="carte carte--vide">
+    <Icone Nom="@IconeNom" />
+    <h2>@Titre arrive en @Version</h2>
+    <p>@Description</p>
+</section>
+
+@code {
+    [Parameter, EditorRequired] public string Titre { get; set; } = string.Empty;
+    [Parameter, EditorRequired] public string Version { get; set; } = string.Empty;
+    [Parameter, EditorRequired] public string IconeNom { get; set; } = string.Empty;
+    [Parameter] public string Description { get; set; } = string.Empty;
+}

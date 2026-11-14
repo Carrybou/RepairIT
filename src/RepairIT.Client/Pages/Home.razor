@@ -1,0 +1,35 @@
+@page "/"
+
+<PageTitle>Accueil · RepairIT</PageTitle>
+
+<header class="entete">
+    <p class="entete__surtitre">Bienvenue sur</p>
+    <h1>RepairIT</h1>
+    <p class="entete__description">Ventes, réparations et stock informatique, réunis dans un seul outil.</p>
+</header>
+
+<div class="grille-modules">
+    @foreach (var module in Modules)
+    {
+        <a class="carte carte--module" href="@module.Url">
+            <Icone Nom="@module.Icone" />
+            <h2>@module.Titre</h2>
+            <p>@module.Description</p>
+            <span class="badge @(module.Disponible ? "badge--succes" : "badge--neutre")">
+                @(module.Disponible ? "Disponible" : $"Prévu en {module.Version}")
+            </span>
+        </a>
+    }
+</div>
+
+@code {
+    private record Module(string Url, string Titre, string Description, string Icone, string Version, bool Disponible);
+
+    private static readonly Module[] Modules =
+    [
+        new("ordinateurs", "Catalogue", "Consulter les ordinateurs du catalogue.", "ordinateur", "V4", false),
+        new("reparations", "Réparations", "Suivre les interventions techniques.", "reparation", "V2", false),
+        new("ventes", "Ventes", "Enregistrer les ventes et suivre le chiffre d'affaires.", "vente", "V3", false),
+        new("tableau-de-bord", "Tableau de bord", "Indicateurs et statistiques de l'activité.", "tableau", "V4", false)
+    ];
+}

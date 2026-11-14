@@ -1,0 +1,42 @@
+<aside class="barre-laterale @(menuOuvert ? "barre-laterale--ouverte" : null)">
+    <div class="marque">
+        <span class="marque__logo">R</span>
+        <span class="marque__nom">Repair<strong>IT</strong></span>
+        <button class="marque__bouton-menu" title="Menu" @onclick="BasculerMenu">☰</button>
+    </div>
+
+    <nav class="navigation" @onclick="FermerMenu">
+        @foreach (var lien in Liens)
+        {
+            <NavLink class="navigation__lien" href="@lien.Url" Match="@(lien.Url == "" ? NavLinkMatch.All : NavLinkMatch.Prefix)">
+                <Icone Nom="@lien.Icone" />
+                <span>@lien.Libelle</span>
+            </NavLink>
+        }
+    </nav>
+
+    <p class="barre-laterale__pied">Version 1 · Catalogue</p>
+</aside>
+
+@code {
+    private record LienMenu(string Url, string Libelle, string Icone);
+
+    // Menu demandé par le sujet (slide 22).
+    private static readonly LienMenu[] Liens =
+    [
+        new("", "Accueil", "accueil"),
+        new("tableau-de-bord", "Tableau de bord", "tableau"),
+        new("ordinateurs", "Ordinateurs", "ordinateur"),
+        new("reparations", "Réparations", "reparation"),
+        new("ventes", "Ventes", "vente"),
+        new("admin", "Administration", "administration"),
+        new("connexion", "Connexion", "connexion")
+    ];
+
+    // Sur mobile, la barre latérale se replie et s'ouvre avec le bouton ☰.
+    private bool menuOuvert;
+
+    private void BasculerMenu() => menuOuvert = !menuOuvert;
+
+    private void FermerMenu() => menuOuvert = false;
+}

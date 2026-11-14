@@ -1,0 +1,31 @@
+# Compilation .NET
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+
+# Système
+.DS_Store
+Thumbs.db
+
+# Bases SQLite générées au démarrage
+*.db
+*.db-shm
+*.db-wal
+
+# Journaux du script start-all.sh
+logs/
+
+# Résultats de tests et rapports de couverture générés localement
+TestResults/
+CoverageReport/
+*.trx
+coverage*.xml
